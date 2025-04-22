@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: photo-service
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: user
+    password: password
+    driver-class-name: org.h2.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 30000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  security:
+    oauth2:
+      client:
+        registration:
+          imgur:
+            client-id: ${IMGUR_CLIENT_ID}
+            client-secret: ${IMGUR_CLIENT_SECRET}
+            authorization-grant-type: refresh_token
+        provider:
+          imgur:
+            token-uri: https://api.imgur.com/oauth2/token
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer.key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    producer.value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+logging:
+  level:
+    reactivefeign: DEBUG
+    com.synchrony: DEBUG
+
+# imgur doesn't allow client credentials flow... ouch!
+imgur:
+  client:
+    token: ${IMGUR_TOKEN}
+
